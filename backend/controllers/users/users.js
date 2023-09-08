@@ -3,15 +3,15 @@ const { compareFaces } = require("../imageSimilarity");
 // Sign Up User api
 const createUser = async (req, res, next) => {
   try {
-    const { name, gmail, phone, cnic, r_id } = req.body;
-    if (!(name && gmail && phone && cnic && r_id)) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Missing some information" });
-    }
+    const { name, gmail, phone, cnic, r_id, o_id } = req.body;
+    // if (!(name && gmail && phone && cnic && r_id, o_id)) {
+    //   return res
+    //     .status(400)
+    //     .json({ success: false, message: "Missing some information" });
+    // }
     const user = await client.query(
-      `insert into users  (name, gmail, phone, cnic,r_id)
-     values ('${name}','${gmail}','${phone}','${cnic}','${r_id}')`,
+      `insert into users  (name, gmail, phone, cnic,is_active,r_id,o_id)
+     values ('${name}','${gmail}','${phone}','${cnic}','true','${r_id}','${o_id}')`,
     );
     if (user) {
       res.status(200).json({
@@ -26,20 +26,17 @@ const createUser = async (req, res, next) => {
 };
 const updateUser = async (req, res, next) => {
   try {
-    const { name, gmail, phone, r_id } = req.body;
-    if (!(name && gmail && phone && cnic && r_id)) {
+    const { gmail, phone, r_id } = req.body;
+    if (!(gmail && phone && cnic && r_id)) {
       return res
         .status(400)
         .json({ success: false, message: "Missing some information" });
     }
-    const user = await client.query(
-      `insert into users  (name, gmail, phone, cnic,r_id)
-       values ('${name}','${gmail}','${phone}','${cnic}','${r_id}')`,
-    );
-    if (user) {
+    const updatetheUser = await client.query(``);
+    if (updatetheUser) {
       res.status(200).json({
         success: true,
-        message: "User Created successfully",
+        message: "User updated successfully",
       });
     }
   } catch (err) {
@@ -62,8 +59,26 @@ const imageSimi = async (req, res) => {
     res.status(500).json({ error: "An error occurred" });
   }
 };
+const getAllUsers = async (req, res, next) => {
+  try {
+    const AllUser = await client.query(
+      `select u."name",u.gmail,u.phone ,u.created_at ,u.cnic ,u.is_active ,o."name" as organizationname,r."name" as role_name from users u  join organization o on u.o_id =o.id join roles r on u.r_id=r.id
+      `,
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "",
+      // data: AllUser.rows,
+    });
+  } catch (err) {
+    return res.status(400).json({ success: false, message: err.message });
+  }
+  client.end;
+};
 module.exports = {
   createUser,
   updateUser,
   imageSimi,
+  getAllUsers,
 };

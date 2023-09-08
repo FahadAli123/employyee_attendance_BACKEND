@@ -4,7 +4,9 @@ const userController = require("../controllers/users/users");
 const organizationController = require("../controllers/organization/organization");
 const premisesController = require("../controllers/premises/premises");
 const employeeController = require("../controllers/employee/employee");
+const roleController=require('../controllers/roles/roles')
 const client = require("../config/db");
+const { compareFaces } = require("../controllers/imageSimilarity");
 
 const router = express.Router();
 
@@ -14,15 +16,23 @@ router.get(
   helloController.hello, // call controller.js
 );
 router.post(
-  `${resource}/user`, // path set ho rha hai   localhost:8080/api/v1/gpo/21/payments
+  `${resource}/createUser`, // path set ho rha hai   localhost:8080/api/v1/gpo/21/payments
   userController.createUser, // call controller.js
 );
 router.post(
   `${resource}/user`, // path set ho rha hai   localhost:8080/api/v1/gpo/21/payments
   userController.updateUser, // call controller.js
 );
+router.get(
+  `${resource}/users`, // path set ho rha hai   localhost:8080/api/v1/gpo/21/payments
+  userController.getAllUsers, // call controller.js
+);
+router.get(
+  `${resource}/allEmployee`, // path set ho rha hai   localhost:8080/api/v1/gpo/21/payments
+  employeeController.getAllEmployee, // call controller.js
+);
 router.post(
-  `${resource}/organization`, // path set ho rha hai   localhost:8080/api/v1/gpo/21/payments
+  `${resource}/organization/create`, // path set ho rha hai   localhost:8080/api/v1/gpo/21/payments
   organizationController.createOrganization, // call controller.js
 );
 router.post(
@@ -36,6 +46,14 @@ router.get(
 router.get(
   `${resource}/organization/:id`, // path set ho rha hai   localhost:8080/api/v1/gpo/21/payments
   organizationController.getOrganizationDetail, // call controller.js
+);
+router.get(
+  `${resource}/organization`, // path set ho rha hai   localhost:8080/api/v1/gpo/21/payments
+  organizationController.getAllOrganizationDetail, // call controller.js
+);
+router.get(
+  `${resource}/role/all`, // path set ho rha hai   localhost:8080/api/v1/gpo/21/payments
+  roleController.getAllRoles, // call controller.js
 );
 // Define API route
 router.post("/compare", userController.imageSimi);

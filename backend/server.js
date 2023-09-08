@@ -3,6 +3,12 @@ const router = require("./routes/routes");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const { loadModels } = require("./controllers/imageSimilarity");
+const { createCanvas, Image, Canvas } = require("canvas");
+const faceapi = require("face-api.js");
+const { fetchImage } = require("face-api.js");
+// const fetch = require("node-fetch");
+
+// faceapi.env.monkeyPatch({ fetch });
 
 const app = express();
 
